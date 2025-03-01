@@ -38,7 +38,7 @@
         );
         html5QrcodeScanner.render(onScanSuccess, onScanFailure);
     </script>
-    
+
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             function onScanSuccess(decodedText, decodedResult) {
@@ -54,5 +54,44 @@
             scanner.render(onScanSuccess, onScanFailure);
         });
     </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            function onScanSuccess(decodedText, decodedResult) {
+                document.getElementById('result').innerText = `Scanned: ${decodedText}`;
+                window.location.href = decodedText; // Redirect to scanned URL
+            }
+    
+            function onScanFailure(error) {
+                console.warn(`QR scan error: ${error}`);
+            }
+    
+            let scanner = new Html5QrcodeScanner("reader", { fps: 10, qrbox: 250 });
+            scanner.render(onScanSuccess, onScanFailure);
+        });
+    
+        function generateQRCode() {
+            let qrText = document.getElementById("qrText").value;
+            let qrCodeContainer = document.getElementById("qrCode");
+            qrCodeContainer.innerHTML = ""; // Clear previous QR Code
+            
+            if (qrText.trim() !== "") {
+                let qr = new QRCode(qrCodeContainer, {
+                    text: qrText,
+                    width: 200,
+                    height: 200
+                });
+            }
+        }
+    </script>
+    
+    <!-- QR Code Generator UI -->
+    <div>
+        <h3>Generate QR Code</h3>
+        <input type="text" id="qrText" placeholder="Enter text or URL">
+        <button onclick="generateQRCode()">Generate</button>
+        <div id="qrCode"></div>
+    </div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 </body>
 </html>
